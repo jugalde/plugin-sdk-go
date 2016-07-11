@@ -11,8 +11,8 @@ RUN go get github.com/tools/godep
 RUN go get github.com/alecthomas/gometalinter
 RUN gometalinter --install
 
-ENV BASE=/go/src/github.com/komand/plugin-sdk
-ADD . /go/src/github.com/komand/plugin-sdk/go
+ENV BASE=/go/src/github.com/komand/plugin-sdk-go
+ADD . /go/src/github.com/komand/plugin-sdk-go
 
-WORKDIR /go/src/github.com/komand/plugin-sdk/go
+WORKDIR /go/src/github.com/komand/plugin-sdk-go
 RUN make all && make test

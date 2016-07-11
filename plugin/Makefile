@@ -1,7 +1,7 @@
 .PHONY: all setup plugin test
 
 export BASE?=$(PWD)/..
-export DST?=$(GOPATH)/src/github.com/komand/plugin-sdk
+export DST?=$(GOPATH)/src/github.com/komand/plugin-sdk-go
 
 
 setup:
@@ -10,8 +10,8 @@ setup:
 all: setup plugin
 
 plugin:
-	cd $(DST)/go/plugin && go get -v ./...
-	cd $(DST)/go/plugin && go build .
+	cd $(DST)/plugin && go get -v ./...
+	cd $(DST)/plugin && go build .
 
 test:
-	cd $(DST)/go/plugin && go list ./... | grep -v /vendor/ | go test -v 
+	cd $(DST)/plugin && go list ./... | grep -v /vendor/ | go test -v 

@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/komand/plugin-sdk/go/plugin/message"
+	"github.com/komand/plugin-sdk-go/plugin/message"
 )
 
 // triggerTask runs a trigger

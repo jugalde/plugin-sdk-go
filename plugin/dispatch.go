@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/komand/plugin-sdk/go/plugin/message"
+	"github.com/komand/plugin-sdk-go/plugin/message"
 )
 
 // the default dispatcher for a trigger is HTTP, and for actions is Stdout.
