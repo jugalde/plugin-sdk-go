@@ -1,3 +1,0 @@
-requests==2.9
-python_jsonschema_objects
-jsonschema==2.3.0

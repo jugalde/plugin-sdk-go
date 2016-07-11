@@ -1,6 +1,13 @@
+setup:
+	make -C plugin setup
 
-.PHONY: all
+all: setup plugin
 
-all: 
-	make -C python image  
-	make -C go image
+plugin:
+	make -C plugin plugin
+
+test:
+	make -C plugin test
+
+image:
+	docker build -t komand/go-plugin .
