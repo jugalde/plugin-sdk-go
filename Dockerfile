@@ -1,4 +1,4 @@
-FROM golang:1.5
+FROM golang:1.7
 
 ENV GO15VENDOREXPERIMENT=1
 
