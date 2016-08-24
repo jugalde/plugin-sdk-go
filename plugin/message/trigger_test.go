@@ -46,8 +46,7 @@ func TestMarshalTriggerStartWithMessageEnvelope(t *testing.T) {
 	}
 
 	trig := &TriggerStart{
-		TriggerID: 1,
-		Trigger:   "hello",
+		Trigger: "hello",
 		startMessage: startMessage{
 			Connection: conn,
 			Dispatcher: dispatcher,
@@ -114,8 +113,7 @@ func TestMarshalTriggerStart(t *testing.T) {
 	}
 
 	trig := &TriggerStart{
-		TriggerID: 1,
-		Trigger:   "hello",
+		Trigger: "hello",
 		startMessage: startMessage{
 			Connection: conn,
 			Dispatcher: dispatcher,
