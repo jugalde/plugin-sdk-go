@@ -145,22 +145,22 @@ func (p *Plugin) setup() (task, error) {
 
 // Run runs a Plugin
 func (p *Plugin) Run() error {
-	task, err := p.setup()
+	t, err := p.setup()
 
 	if err != nil {
 		return err
 	}
-	return task.Run()
+	return t.Run()
 }
 
 // Test tests a Plugin
 func (p *Plugin) Test() error {
-	task, err := p.setup()
+	t, err := p.setup()
 
 	if err != nil {
 		return err
 	}
-	return task.Test()
+	return t.Test()
 }
 
 // AddTrigger adds triggers to the map of Plugins triggers
