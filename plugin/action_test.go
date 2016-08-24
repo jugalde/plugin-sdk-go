@@ -9,7 +9,6 @@ import (
 
 var actionStartMessage = `
 {
-  "id": "id123",
   "version": "v1",
   "type": "action_start",
   "body": {
@@ -25,7 +24,6 @@ var actionStartMessage = `
 
 var invalidTypeActionStartMessage = `
 {
-  "id": "id123",
   "version": "v1",
   "type": "not_action_start",
   "body": {
@@ -92,7 +90,7 @@ func (h *HelloAction) Act() error {
 
 func TestWorkingAction(t *testing.T) {
 	parameter.Stdin = parameter.NewParamSet(strings.NewReader(actionStartMessage))
-	expectedOutputEvent := `{"id":"","version":"v1","type":"action_event","body":{"meta":{"action_id":14},"status":"ok","error":"","output":{"greeting":"good day to you"}}}`
+	expectedOutputEvent := `{"version":"v1","type":"action_event","body":{"meta":{"action_id":14},"status":"ok","error":"","output":{"greeting":"good day to you"}}}`
 	dispatcher := &mockDispatcher{}
 
 	// mock dispatcher to test dispatch works
@@ -128,7 +126,6 @@ func TestGenerateSampleActionStartMessage(t *testing.T) {
 	action := &HelloAction{}
 
 	sample := `{
-   "id": "id123",
    "version": "v1",
    "type": "action_start",
    "body": {

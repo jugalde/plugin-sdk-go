@@ -12,7 +12,6 @@ import (
 
 var triggerTestStartMessage = `
 {
-	"id":"id123",
   "version": "v1",
   "type": "trigger_start",
   "body": {
@@ -29,7 +28,6 @@ var triggerTestStartMessage = `
 
 var triggerStartMessage = `
 {
-	"id":"id123",
   "version": "v1",
   "type": "trigger_start",
   "body": {
@@ -47,7 +45,6 @@ var triggerStartMessage = `
 
 var invalidTypeTriggerStartMessage = `
 {
-	"id":"id123",
   "version": "v1",
   "type": "not_trigger_start",
   "body": {
@@ -139,7 +136,7 @@ func TestWorkingTrigger(t *testing.T) {
 
 	trigger := &HelloTrigger{}
 
-	expectedOutputEvent := `{"id":"","version":"v1","type":"trigger_event","body":{"meta":{"channel":"xyz-abc-123"},"output":{"Goodbye":"bob"}}}`
+	expectedOutputEvent := `{"version":"v1","type":"trigger_event","body":{"id":"","meta":{"channel":"xyz-abc-123"},"output":{"Goodbye":"bob"}}}`
 	parameter.Stdin = parameter.NewParamSet(strings.NewReader(triggerStartMessage))
 
 	dispatcher := &mockDispatcher{}
@@ -354,7 +351,6 @@ func TestBadConnectionWillFailTest(t *testing.T) {
 }
 
 var sampleMsg = `{
-   "id": "id123",
    "version": "v1",
    "type": "trigger_start",
    "body": {
