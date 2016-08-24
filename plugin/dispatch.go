@@ -71,7 +71,7 @@ func (d *HTTPDispatcher) Send(event *message.Message) error {
 	req, err := http.NewRequest("POST", d.URL, bytes.NewBuffer(messageBytes))
 
 	if err != nil {
-		err := fmt.Errorf("Unable to POST to dispatcher: %+v", err)
+		err = fmt.Errorf("Unable to POST to dispatcher: %+v", err)
 		return err
 	}
 
@@ -79,7 +79,7 @@ func (d *HTTPDispatcher) Send(event *message.Message) error {
 
 	resp, err := d.client.Do(req)
 	if err != nil {
-		err := fmt.Errorf("Unable to send event to http dispatcher: %+v", err)
+		err = fmt.Errorf("Unable to send event to http dispatcher: %+v", err)
 		return err
 	}
 	defer resp.Body.Close()

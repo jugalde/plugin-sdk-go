@@ -106,8 +106,8 @@ func (c *cli) Run() {
 	args, err := app.Parse(c.Args)
 
 	if *debug {
-		if debuggable, ok := plugin.(debuggable); ok {
-			debuggable.SetDebug()
+		if dbgable, ok := plugin.(debuggable); ok {
+			dbgable.SetDebug()
 		}
 	}
 
