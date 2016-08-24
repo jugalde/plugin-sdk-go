@@ -137,14 +137,14 @@ type triggerEventCollector struct {
 }
 
 func makeTriggerEventCollector(message *message.TriggerStart, trigger Triggerable, dispatcher Dispatcher) (*triggerEventCollector, error) {
-	if queueable, ok := trigger.(queueable); ok {
+	if q, ok := trigger.(queueable); ok {
 
-		queueable.InitQueue()
+		q.InitQueue()
 
 		return &triggerEventCollector{
 			message:    message,
 			stopped:    make(chan bool, 1),
-			sender:     queueable,
+			sender:     q,
 			dispatcher: dispatcher,
 		}, nil
 	}

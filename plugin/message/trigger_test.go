@@ -7,7 +7,7 @@ import (
 
 func TestMarshalTriggerStartWithMessageEnvelope(t *testing.T) {
 
-	expected := `{"version":"v1","type":"trigger_start","body":{"trigger_id":1,"trigger":"hello","connection":{"username":"hello","password":"blah"},"dispatcher":{"url":"http://abc123"},"input":{"param":"ok","param2":"blah"}}}`
+	expected := `{"id":"id123","version":"v1","type":"trigger_start","body":{"trigger_id":1,"trigger":"hello","connection":{"username":"hello","password":"blah"},"dispatcher":{"url":"http://abc123"},"input":{"param":"ok","param2":"blah"}}}`
 
 	connJSON := `
 	{
@@ -46,8 +46,7 @@ func TestMarshalTriggerStartWithMessageEnvelope(t *testing.T) {
 	}
 
 	trig := &TriggerStart{
-		TriggerID: 1,
-		Trigger:   "hello",
+		Trigger: "hello",
 		startMessage: startMessage{
 			Connection: conn,
 			Dispatcher: dispatcher,
@@ -57,6 +56,7 @@ func TestMarshalTriggerStartWithMessageEnvelope(t *testing.T) {
 
 	m := Message{
 		Header: Header{
+			ID:      "id123",
 			Version: "v1",
 			Type:    "trigger_start",
 		},
@@ -114,8 +114,7 @@ func TestMarshalTriggerStart(t *testing.T) {
 	}
 
 	trig := &TriggerStart{
-		TriggerID: 1,
-		Trigger:   "hello",
+		Trigger: "hello",
 		startMessage: startMessage{
 			Connection: conn,
 			Dispatcher: dispatcher,

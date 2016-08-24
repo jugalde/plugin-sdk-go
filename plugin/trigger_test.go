@@ -12,6 +12,7 @@ import (
 
 var triggerTestStartMessage = `
 {
+	"id":"id123",
   "version": "v1",
   "type": "trigger_start",
   "body": {
@@ -28,6 +29,7 @@ var triggerTestStartMessage = `
 
 var triggerStartMessage = `
 {
+	"id":"id123",
   "version": "v1",
   "type": "trigger_start",
   "body": {
@@ -45,6 +47,7 @@ var triggerStartMessage = `
 
 var invalidTypeTriggerStartMessage = `
 {
+	"id":"id123",
   "version": "v1",
   "type": "not_trigger_start",
   "body": {
@@ -136,7 +139,7 @@ func TestWorkingTrigger(t *testing.T) {
 
 	trigger := &HelloTrigger{}
 
-	expectedOutputEvent := `{"version":"v1","type":"trigger_event","body":{"meta":{"channel":"xyz-abc-123"},"output":{"Goodbye":"bob"}}}`
+	expectedOutputEvent := `{"id":"","version":"v1","type":"trigger_event","body":{"meta":{"channel":"xyz-abc-123"},"output":{"Goodbye":"bob"}}}`
 	parameter.Stdin = parameter.NewParamSet(strings.NewReader(triggerStartMessage))
 
 	dispatcher := &mockDispatcher{}
@@ -157,7 +160,7 @@ func TestWorkingTrigger(t *testing.T) {
 	err := p.Run()
 
 	if err != nil {
-		t.Fatalf("Unable to run %s: %v", p.Name, err)
+		t.Fatalf("Unable to run %s: %v", p.Name(), err)
 	}
 
 	if trigger.input.Person != "Bob" {
@@ -239,7 +242,7 @@ func TestRunPluginTriggerWithTestRunsTest(t *testing.T) {
 	err := p.Test()
 
 	if err != nil {
-		t.Fatalf("Unable to test %s: %v", p.Name, err)
+		t.Fatalf("Unable to test %s: %v", p.Name(), err)
 	}
 
 	if trigger.testRan != true {
@@ -270,7 +273,7 @@ func TestRunPluginTriggerWithoutTestDoesNothing(t *testing.T) {
 	err := p.Test()
 
 	if err != nil {
-		t.Fatalf("Unable to test %s: %v", p.Name, err)
+		t.Fatalf("Unable to test %s: %v", p.Name(), err)
 	}
 
 	if trigger.testRan != false {
@@ -351,6 +354,7 @@ func TestBadConnectionWillFailTest(t *testing.T) {
 }
 
 var sampleMsg = `{
+   "id": "id123",
    "version": "v1",
    "type": "trigger_start",
    "body": {
@@ -383,7 +387,7 @@ func TestGenerateSampleTriggerStartMessage(t *testing.T) {
 
 	p, _ := GenerateSampleTriggerStart(trigger)
 	if p != sampleMsg {
-		t.Fatal("Expected trigger start to be equal: %s, %s", p, sampleMsg)
+		t.Fatalf("Expected trigger start to be equal: %s, %s", p, sampleMsg)
 	}
 
 }
