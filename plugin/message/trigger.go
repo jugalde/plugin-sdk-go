@@ -11,6 +11,7 @@ type TriggerStart struct {
 
 // TriggerEvent messages encapsulate any output event emitted by the plugins.
 type TriggerEvent struct {
+	ID     string           `json:"id"` // Application level identifier for the TriggerEvent for later tracking via the UI
 	Meta   *json.RawMessage `json:"meta"`
 	Output OutputMessage    `json:"output"`
 }
