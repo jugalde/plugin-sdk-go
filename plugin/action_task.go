@@ -17,7 +17,7 @@ type actionTask struct {
 func (a *actionTask) Test() error {
 
 	// unpack the action connection and input configurations
-	if err := a.unpack(); err != nil {
+	if err := a.unpack(true); err != nil {
 		return err
 	}
 
@@ -50,7 +50,7 @@ func (a *actionTask) Test() error {
 // Run will start the action
 func (a *actionTask) Run() error {
 	// unpack the action connection and input configurations
-	if err := a.unpack(); err != nil {
+	if err := a.unpack(false); err != nil {
 		return err
 	}
 
@@ -119,7 +119,7 @@ func (a *actionTask) emit(err string, out Output) error {
 }
 
 // unpack the ActionStart message into the task action
-func (a *actionTask) unpack() error {
+func (a *actionTask) unpack(ignoreInputs bool) error {
 
 	msg := a.message
 
@@ -127,7 +127,7 @@ func (a *actionTask) unpack() error {
 		msg.Connection.Contents = connectable.Connection()
 	}
 
-	if inputable, ok := a.action.(Inputable); ok {
+	if inputable, ok := a.action.(Inputable); ok && !ignoreInputs {
 		msg.Input.Contents = inputable.Input()
 	}
 
@@ -144,7 +144,7 @@ func (a *actionTask) unpack() error {
 		}
 	}
 
-	if inputable, ok := a.action.(Inputable); ok {
+	if inputable, ok := a.action.(Inputable); ok && !ignoreInputs {
 		if err := clean(inputable.Input().Validate()); err != nil {
 			return fmt.Errorf("Input validation failed: %s", joinErrors(err))
 		}

@@ -11,3 +11,5 @@ test:
 
 image:
 	docker build -t komand/go-plugin .
+
+.PHONY: setup all test image plugin
