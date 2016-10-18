@@ -136,7 +136,7 @@ func TestWorkingTrigger(t *testing.T) {
 
 	trigger := &HelloTrigger{}
 
-	expectedOutputEvent := `{"version":"v1","type":"trigger_event","body":{"id":"","meta":{"channel":"xyz-abc-123"},"output":{"Goodbye":"bob"}}}`
+	expectedOutputEvent := `{"version":"v1","type":"trigger_event","body":{"id":"","group_id":"","meta":{"channel":"xyz-abc-123"},"output":{"Goodbye":"bob"}}}`
 	parameter.Stdin = parameter.NewParamSet(strings.NewReader(triggerStartMessage))
 
 	dispatcher := &mockDispatcher{}
