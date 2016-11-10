@@ -8,6 +8,8 @@ import (
 
 	"github.com/komand/plugin-sdk-go/plugin/message"
 	"github.com/komand/plugin-sdk-go/plugin/parameter"
+
+	log "github.com/Sirupsen/logrus"
 )
 
 // Pluginable is what plugins implement.
@@ -41,6 +43,9 @@ const (
 // init initializes the plugin package, collecting parameters from the command line
 // Functionality comes from param.go
 func init() {
+	log.SetOutput(os.Stderr)
+	log.SetLevel(log.InfoLevel)
+
 	// defaults to stdin
 	parameter.Stdin = parameter.NewParamSet(os.Stdin)
 
@@ -227,6 +232,9 @@ func (p Plugin) SampleStartMessage(name string) (string, error) {
 func (p Plugin) SetDebug() {
 	defaultTriggerDispatcher = &StdoutDispatcher{}
 	defaultActionDispatcher = &StdoutDispatcher{}
+	// Only log the warning severity or above.
+	log.SetLevel(log.DebugLevel)
+	log.Debug("Setting debug logging")
 }
 
 // SetDebugLog mode will log all events to a debug log file.
