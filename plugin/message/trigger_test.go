@@ -7,7 +7,7 @@ import (
 
 func TestMarshalTriggerStartWithMessageEnvelope(t *testing.T) {
 
-	expected := `{"version":"v1","type":"trigger_start","body":{"trigger_id":1,"trigger":"hello","connection":{"username":"hello","password":"blah"},"dispatcher":{"url":"http://abc123"},"input":{"param":"ok","param2":"blah"}}}`
+	expected := `{"version":"v1","type":"trigger_start","body":{"meta":null,"trigger":"hello","connection":{"username":"hello","password":"blah"},"dispatcher":{"url":"http://abc123"},"input":{"param":"ok","param2":"blah"}}}`
 
 	connJSON := `
 	{
@@ -68,13 +68,13 @@ func TestMarshalTriggerStartWithMessageEnvelope(t *testing.T) {
 	}
 
 	if string(str) != expected {
-		t.Fatalf("Got %s but expected %s", str, expected)
+		t.Fatalf("Got:\n%s\nbut expected:\n%s\n", str, expected)
 	}
 
 }
 
 func TestMarshalTriggerStart(t *testing.T) {
-	expected := `{"trigger_id":1,"trigger":"hello","connection":{"username":"hello","password":"blah"},"dispatcher":{"url":"http://abc123"},"input":{"param":"ok","param2":"blah"}}`
+	expected := `{"meta":null,"trigger":"hello","connection":{"username":"hello","password":"blah"},"dispatcher":{"url":"http://abc123"},"input":{"param":"ok","param2":"blah"}}`
 
 	connJSON := `
 	{
@@ -129,6 +129,6 @@ func TestMarshalTriggerStart(t *testing.T) {
 	}
 
 	if string(str) != expected {
-		t.Fatalf("Got %s but expected %s", str, expected)
+		t.Fatalf("Got:\n%s\nbut expected:\n%s\n", str, expected)
 	}
 }

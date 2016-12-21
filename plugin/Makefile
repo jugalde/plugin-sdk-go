@@ -14,5 +14,5 @@ plugin:
 	cd $(DST)/plugin && go build .
 
 test:
-	cd $(DST)/plugin && go list ./... | grep -v /vendor/ | go test -v
-	cd $(DST)/test/cache/ && go run
+	cd $(DST)/plugin && go list ./... | grep -v /vendor/ | xargs -P4 -L1 go test -v
+	cd $(DST)/test/cache/ && go run main.go
