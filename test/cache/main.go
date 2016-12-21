@@ -4,7 +4,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"os"
 	"sync"
@@ -74,7 +73,6 @@ func main() {
 			wg.Done()
 		}(i)
 	}
-	fmt.Println("Waiting...")
 	wg.Wait()
-	fmt.Println("Done...")
+	// The program will exit 0 here if nothing went wrong
 }
