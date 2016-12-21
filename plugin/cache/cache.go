@@ -7,14 +7,16 @@ package cache
 
 import (
 	"os"
-	"path/filepath"
 	"strings"
 	"time"
+
+	"github.com/komand/plugin-sdk-go/plugin/utils"
 )
 
 const cacheDir = "/var/cache/"
 const lockDir = "/var/cache/lock/"
 const filePerms = 0600
+const lockWaitBackoff = 1 * time.Millisecond
 
 // InvalidCacheFileName is returned when a cache file has an invalid name
 type InvalidCacheFileName string
@@ -48,10 +50,10 @@ func RemoveCacheFile(name string) error {
 
 // CheckCacheFile checks if the file exists in the cache or not
 func CheckCacheFile(name string) (bool, error) {
-	return doesExist(cacheDir + stripLeftSlash(name))
+	return utils.DoesFileExist(cacheDir + stripLeftSlash(name))
 }
 
-// LockCacheFile will lock the provided file from /var/cache/* and return a boolean if the operation
+// LockCacheFile will lock the provided file from /var/cache/lock/* and return a boolean if the operation
 // was successful or not. In the event it was not, an error may or may not be returned (always check the value first
 // to know if it worked)
 // the name argument should not begin with a slash, and should assume it will be appended to /var/cache
@@ -61,10 +63,10 @@ func LockCacheFile(name string) (bool, error) {
 	var err error
 	for {
 		// Spin wait until something errors, or the file becomes free
-		if ok, err = doesExist(name); ok && err == nil {
+		if ok, err = utils.DoesFileExist(name); ok && err == nil {
 			// Let's give the thread a nap while we wait, instead of pegging the CPU
-			time.Sleep(1 * time.Microsecond) // TODO should this be configurable?
-			continue                         // loop back to the top, try again
+			time.Sleep(lockWaitBackoff) // TODO should this be configurable?
+			continue                    // loop back to the top, try again
 		}
 		// If we got by the if clause because of an error, something is wrong - bail out
 		if err != nil {
@@ -88,7 +90,7 @@ func LockCacheFile(name string) (bool, error) {
 	return true, nil
 }
 
-// UnlockCacheFile will unlock the provided file from /var/cache/* and return a boolean if the operation
+// UnlockCacheFile will unlock the provided file from /var/cache/lock/* and return a boolean if the operation
 // was successful or not. In the event it was not, an error may or may not be returned (always check the value first
 // to know if it worked)
 // the name argument should not begin with a slash, and should assume it will be appended to /var/cache
@@ -111,6 +113,7 @@ func stripLeftSlash(name string) string {
 	return strings.TrimLeft(name, "/")
 }
 
+// Makes sure you don't use any reserved terms in a name, for example a file simply called "lock" in the /var/cache directory
 func isReservedName(name string) error {
 	if strings.HasSuffix(name, "/lock") {
 		return InvalidCacheFileName("'lock' is a reserved name in the cache, please choose a different file name")
@@ -118,42 +121,12 @@ func isReservedName(name string) error {
 	return nil
 }
 
-// Does not exist returns an error because there is a slight chance something goes wrong
-// when checking the file system, and so the caller may need to bubble the error up to it's caller
-// I'm not 100% sure how or why this might happen, but it's better to not ignore it, even at the cost
-// of a slightly dumber API
-func doesExist(name string) (bool, error) {
-	if _, err := os.Stat(name); err != nil {
-		if os.IsNotExist(err) {
-			return false, nil
-		}
-		return false, err
-	}
-	return true, nil
-}
-
+// Wrapper around utils.OpenFile to bake in the right perms/flags
 func openFile(name string) (*os.File, error) {
-	return open(name, os.O_RDWR|os.O_CREATE)
+	return utils.OpenFile(name, os.O_RDWR|os.O_CREATE, filePerms)
 }
 
+// Wrapper around utils.OpenFile to bake in the right perms/flags for exclusive file locks
 func openExclusiveFile(name string) (*os.File, error) {
-	return open(name, os.O_RDWR|os.O_CREATE|os.O_EXCL)
-}
-
-func open(name string, flags int) (*os.File, error) {
-	if _, err := os.Stat(name); err != nil {
-		// If it didn't exist
-		var ok bool
-		if ok, err = doesExist(name); !ok && err == nil {
-			// Create the file and all directories leading up to it, if it didn't exist
-			if err = os.MkdirAll(filepath.Dir(name), os.ModePerm); err != nil {
-				return nil, err
-			}
-		}
-		if err != nil {
-			return nil, err
-		}
-	}
-	// Make the file
-	return os.OpenFile(name, flags, filePerms)
+	return utils.OpenFile(name, os.O_RDWR|os.O_CREATE|os.O_EXCL, filePerms)
 }
