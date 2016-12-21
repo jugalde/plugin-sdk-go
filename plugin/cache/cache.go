@@ -63,14 +63,15 @@ func LockCacheFile(name string) (bool, error) {
 	var err error
 	for {
 		// Spin wait until something errors, or the file becomes free
-		if ok, err = utils.DoesFileExist(name); ok && err == nil {
+		if ok, err = utils.DoesFileExist(name); err != nil {
+			// If anything went wrong checking for the file, bail out
+			return false, err
+		}
+		// If the file did exist, we want to try again until it doesn't
+		if ok {
 			// Let's give the thread a nap while we wait, instead of pegging the CPU
 			time.Sleep(lockWaitBackoff) // TODO should this be configurable?
 			continue                    // loop back to the top, try again
-		}
-		// If we got by the if clause because of an error, something is wrong - bail out
-		if err != nil {
-			return false, err
 		}
 		// attempt an exclusive lock - if something already grabbed the file out from under us, we simply go back to waiting
 		var f *os.File
@@ -78,10 +79,8 @@ func LockCacheFile(name string) (bool, error) {
 			if os.IsExist(err) {
 				continue // The error was that the file existed - so we just keep on a'rollin
 			}
-			if err != nil {
-				// This was another error, some legitimate problem went wrong
-				return false, err
-			}
+			// This was another error, some legitimate problem went wrong
+			return false, err
 		}
 		f.Close()
 		break // if it ever actually gets to the end of the for loop, it means we got the exclusive lock

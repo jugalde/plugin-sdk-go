@@ -16,17 +16,17 @@ func OpenFile(name string, flags int, perms os.FileMode) (*os.File, error) {
 	if _, err := os.Stat(name); err != nil {
 		// If it didn't exist
 		var ok bool
-		if ok, err = DoesFileExist(name); !ok && err == nil {
+		if ok, err = DoesFileExist(name); err != nil {
 			// Create the file and all directories leading up to it, if it didn't exist
+			return nil, err
+		}
+		if !ok { // if the file doesn't exist, do a best-effort attempt to make any missing parts of the directory first
 			if err = os.MkdirAll(filepath.Dir(name), os.ModePerm); err != nil {
 				return nil, err
 			}
 		}
-		if err != nil {
-			return nil, err
-		}
 	}
-	// Make the file
+	// Create the file if it doesn't exist, otherwise open the file if it's already on disk, based on flags
 	return os.OpenFile(name, flags, perms)
 }
 

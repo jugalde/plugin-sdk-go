@@ -1,11 +1,9 @@
-package utils_test
+package utils
 
 import (
 	"io/ioutil"
 	"os"
 	"testing"
-
-	"github.com/komand/plugin-sdk-go/plugin/utils"
 )
 
 func TestFileOpenReadWrite(t *testing.T) {
@@ -13,7 +11,7 @@ func TestFileOpenReadWrite(t *testing.T) {
 	data := "sup, jerks"
 	os.Remove(filename) // Cleanup the last test run incase it failed or crashed
 
-	f, err := utils.OpenFile(filename, os.O_RDWR|os.O_CREATE, 0600)
+	f, err := OpenFile(filename, os.O_RDWR|os.O_CREATE, 0600)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -21,7 +19,7 @@ func TestFileOpenReadWrite(t *testing.T) {
 	f.Write(b)
 	f.Close()
 
-	f, err = utils.OpenFile(filename, os.O_RDWR|os.O_CREATE, 0600)
+	f, err = OpenFile(filename, os.O_RDWR|os.O_CREATE, 0600)
 	if err != nil {
 		t.Fatal(err)
 	}

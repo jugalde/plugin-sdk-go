@@ -29,13 +29,11 @@ func (c *counter) Grab(grID int) {
 	if c.count > 0 {
 		log.Fatalf("%d tried to grab, but %d already held it\n", grID, c.holder)
 	}
-	fmt.Printf("%d is grabbin\n", grID)
 	c.count++
 	c.holder = grID
 }
 
 func (c *counter) Release(grID int) {
-	fmt.Printf("%d is releasin\n", grID)
 	c.count--
 	c.holder = -1
 }
