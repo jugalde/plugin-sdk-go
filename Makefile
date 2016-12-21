@@ -11,16 +11,14 @@ plugin:
 
 test:
 	make -C plugin test
-
+	
 image:
 	docker build -t komand/go-plugin .
 
 tag: image
 	@echo version is $(VERSION)
-	docker tag komand/go-plugin komand/go-plugin:$(VERSION) 
-	docker tag komand/go-plugin:$(VERSION) komand/go-plugin:$(MAJOR_VERSION) 
+	docker tag komand/go-plugin komand/go-plugin:$(VERSION)
+	docker tag komand/go-plugin:$(VERSION) komand/go-plugin:$(MAJOR_VERSION)
 
 
 .PHONY: setup all test image plugin tag
-
-
